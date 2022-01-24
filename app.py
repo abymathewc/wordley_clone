@@ -77,6 +77,7 @@ def main():
         row = row+1
     if (row>=6) :
         print (" Exhausted the number of tries. Exiting...")
+        print (" The word was : ", game.word)
         exit(0)
     if (game.game_over):
         print(" Congrats..")
