@@ -1,12 +1,19 @@
+import os
 import random
+import sys
 from colorama import init, Fore, Back, Style
 
 # Initializes Colorama
 init(autoreset=True)
 
-
-WORD_FILE="words_list_sorted.txt"
-with open(WORD_FILE, "r") as wf:
+# word file shenanigans
+WORD_FILE = "words_list_sorted.txt"
+# For creating exe using pyinstaller . In bundled mode, the exe looks for data file in MEIPASS variable.
+# So, if that is available use that variable as the file path
+# Else ( which basically means executing directly from the script and not as an exe, use the current directory as the path)
+bundle_dir = getattr(sys, '_MEIPASS', os.path.abspath(os.path.dirname(__file__)))
+word_file_path = os.path.abspath(os.path.join(bundle_dir,WORD_FILE))
+with open(word_file_path, "r") as wf:
     word_list = wf.readlines()
 #The above word_list will have newline character as well. Strip it out in order not to have
 #issues while comparing with the guess word.
@@ -75,13 +82,13 @@ def main():
         game.print_game_tile()
 
         row = row+1
-    if (row>=6) :
+    if (row>=6 and not game.game_over) :
         print (" Exhausted the number of tries. Exiting...")
         print (" The word was : ", game.word)
-        exit(0)
+        sys.exit(0)
     if (game.game_over):
         print(" Congrats..")
-        exit(0)
+        sys.exit(0)
 
 if __name__=="__main__":
     main()
